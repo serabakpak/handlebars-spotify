@@ -16,6 +16,10 @@ $(document).ready(function() {
   // loading gif
   var $loading = $('#loading');
 
+  var source = $('#tracks-template').html();
+  console.log('template script source:', source);
+  var template = Handlebars.compile(source);
+
 
   // submit form to search spotify API
   $spotifySearch.on('submit', function(event) {
@@ -26,7 +30,7 @@ $(document).ready(function() {
 
     // save form data to variable
     var searchTrack = $track.val();
-
+    
     // only search if the form has a keyword to search with!
     if (searchTrack !== ""){
       // show loading gif
@@ -66,21 +70,13 @@ $(document).ready(function() {
     // hide loading gif
     $loading.hide();
 
-    // show results on page:
-    // iterate through results
-    trackResults.forEach(function (result, index) {
-      // use results to construct HTML we want to show
-      //**** GAAAAAH! THERE HAS TO BE A BETTER WAY! ****//
-      var trackHtml = '<div class="row"><div class="col-xs-4">' +
-        '<img src="' + result.album.images[0].url + '" class="img-responsive"></div>' +
-        '<div class="col-xs-8"><p><strong>' + result.name + '</strong> by ' +
-        result.artists[0].name + '</p><p><a href="' + result.preview_url +
-        '" target="_blank" class="btn btn-sm btn-default">Preview ' +
-        '<span class="glyphicon glyphicon-play"></span></a></p></div></div><hr>';
+ 
+      
 
-      // append HTML to the view
+      
+      var trackHtml = template({ tracks: trackResults });
+      console.log(trackHtml);
       $('#results').append(trackHtml);
-    });
   }
 
 });
